@@ -1,6 +1,5 @@
 import java.util.Random;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -17,9 +16,10 @@ public class BeginnerGrid extends JPanel {
 	private final int EMPTY_CELL = 0;
 	private final int COVER_FOR_CELL = 9;
 	private final int FLAG = 10;
+	private final int WRONG_FLAG = 13;
 	private final int BOMB = 11;
 	private final int RED_BOMB = 12;
-	private final int NUM_IMAGES = 13;
+	private final int NUM_IMAGES = 14;
 	private final int CELL_SIZE = 19;
 	private final int COVERED_MINE_CELL = COVER_FOR_CELL + BOMB;
 	private final int FLAGGED_MINE_CELL = FLAG + BOMB;
@@ -411,7 +411,7 @@ public class BeginnerGrid extends JPanel {
 		
 		//cells[i][j].setImageIndex(cells[i][j].getValue());
 		
-		if ( cells[i][j].getValue() == 0 && !cells[i][j].getIsUncovered())
+		if ( cells[i][j].getValue() == 0 && !cells[i][j].getIsUncovered() &&  !cells[i][j].getIsFlagged())
 		{
 			cells[i][j].setIsUncovered(true);
 			if ( j < 8) findEmptyCells(i, j + 1);
@@ -427,7 +427,8 @@ public class BeginnerGrid extends JPanel {
 			if ( i > 0 && j < 8) findEmptyCells(i - 1, j + 1);	
 		}
 	    
-		cells[i][j].setIsUncovered(true);
+		if (!cells[i][j].getIsFlagged())
+			cells[i][j].setIsUncovered(true);
 		repaint();
 	}
 	
@@ -480,6 +481,30 @@ public class BeginnerGrid extends JPanel {
 		}
 	}
 
+	public void gameOver(int col, int row)
+	{
+		for ( int i = 0; i < 9; i++)
+		{
+			for ( int j = 0; j < 9; j++)
+			{
+				if ( !cells[j][i].getIsFlagged())
+				{
+					cells[j][i].setIsUncovered(true);
+				}
+				else 
+				{
+					if ( cells[j][i].getValue() != BOMB)
+					{
+						cells[j][i].setValue(WRONG_FLAG);
+						cells[j][i].setIsUncovered(true);
+					}
+				}
+			}
+		}
+		
+		repaint();
+	}
+	
 	class MinesAdapter extends MouseAdapter {
         public void mousePressed(MouseEvent e) {
 
@@ -512,6 +537,12 @@ public class BeginnerGrid extends JPanel {
                 	else 
                 	{
                 		cells[cCol][cRow].setIsUncovered(true);
+                	}
+                	
+                	if ( cells[cCol][cRow].getValue() == BOMB)
+                	{
+                		cells[cCol][cRow].setValue(RED_BOMB);
+                		gameOver(cCol, cRow);
                 	}
                 	
                 	rep = true;
