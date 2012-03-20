@@ -27,20 +27,23 @@ public class BeginnerGrid extends JPanel {
 	
 	private Image[] img;
 	private int numMines = 10;
-	private int gridDim;
+	private int gridDimX, gridDimY;
 	private boolean inGame = true;
 	private int flaggedMines = 0;
 	private int numFlags = 0;
+	private StopWatch s = new StopWatch();
+	private Record record=new Record();
 	
 	private JLabel statusBar;
 	Cell[][] cells;// = new Cell[gridDim][gridDim];
 	
 	/// Constructor for BeginnerGrid, 9 x 9 with 10 mines
-	public BeginnerGrid(JLabel statusBar, int gridDimension, int numBombs) {
+	public BeginnerGrid(JLabel statusBar, int gridDimensionX, int gridDimensionY, int numBombs) {
 		
 		numMines = numBombs;
-		gridDim = gridDimension;
-		cells = new Cell[gridDim][gridDim];
+		gridDimX = gridDimensionX;
+		gridDimY = gridDimensionY;
+		cells = new Cell[gridDimX][gridDimY];
 		
 		this.statusBar = statusBar;
 		
@@ -57,9 +60,9 @@ public class BeginnerGrid extends JPanel {
 		addMouseListener(new MinesAdapter());
 		
 		// Build and populate grid with cells.
-		for ( int i = 0; i < gridDimension; i++)
+		for ( int i = 0; i < gridDimX; i++)
 		{
-			for ( int j = 0; j < gridDimension; j++)
+			for ( int j = 0; j < gridDimY; j++)
 			{
 				cells[i][j] = new Cell();
 			}
@@ -76,8 +79,8 @@ public class BeginnerGrid extends JPanel {
 	{
 		// Generate 10 bombs
 		Random random = new Random();
-		int randIndexX = random.nextInt(gridDim);
-		int randIndexY = random.nextInt(gridDim);
+		int randIndexX = random.nextInt(gridDimX);
+		int randIndexY = random.nextInt(gridDimY);
 		int numBombs = 0;
 		
 		while (numBombs != _numMines)
@@ -111,7 +114,7 @@ public class BeginnerGrid extends JPanel {
 						}
 					}
 					
-					else if ( randIndexY == gridDim - 1 ) // we are at the bottom left corner
+					else if ( randIndexY == gridDimY - 1 ) // we are at the bottom left corner
 					{
 						int curVal;
 						if ( cells[randIndexX + 1][randIndexY].getValue() != BOMB )
@@ -170,7 +173,7 @@ public class BeginnerGrid extends JPanel {
 					}
 				}
 				
-				else if ( randIndexX == gridDim - 1 )		// we are at right edge
+				else if ( randIndexX == gridDimX - 1 )		// we are at right edge
 				{
 					if ( randIndexY == 0 ) // we are at the top right corner
 					{
@@ -194,7 +197,7 @@ public class BeginnerGrid extends JPanel {
 						}
 					}
 					
-					else if ( randIndexY == gridDim - 1 ) // we are at the bottom right corner
+					else if ( randIndexY == gridDimY - 1 ) // we are at the bottom right corner
 					{
 						int curVal;
 						if ( cells[randIndexX - 1][randIndexY].getValue() != BOMB )
@@ -287,7 +290,7 @@ public class BeginnerGrid extends JPanel {
 					
 				}
 				
-				else if (randIndexY == gridDim - 1)		// we are along the bottom of the board
+				else if (randIndexY == gridDimY - 1)		// we are along the bottom of the board
 				{
 					// Corners are handled by earlier cases, so we only need the case where
 					// we are somewhere along the bottom
@@ -380,14 +383,14 @@ public class BeginnerGrid extends JPanel {
 				
 			}
 			
-			randIndexX = random.nextInt(gridDim);
-			randIndexY = random.nextInt(gridDim);
+			randIndexX = random.nextInt(gridDimX);
+			randIndexY = random.nextInt(gridDimY);
 		}
 		
 		// Set image index to value of cell
-		for ( int i = 0; i < gridDim; i++ )
+		for ( int i = 0; i < gridDimY; i++ )
 		{
-			for ( int j = 0; j < gridDim; j++)
+			for ( int j = 0; j < gridDimX; j++)
 			{
 				if ( cells[j][i].getValue() != BOMB)
 				{
@@ -402,9 +405,9 @@ public class BeginnerGrid extends JPanel {
 	/// For testing: prints the underlying values of the grid
 	public void testGrid() 
 	{
-		for ( int i = 0; i < gridDim; i++)
+		for ( int i = 0; i < gridDimY; i++)
 		{
-			for ( int j = 0; j < gridDim; j++)
+			for ( int j = 0; j < gridDimX; j++)
 			{
 				System.out.print(cells[j][i].getValue() + " ");
 			}
@@ -420,17 +423,17 @@ public class BeginnerGrid extends JPanel {
 		if ( cells[i][j].getValue() == 0 && !cells[i][j].getIsUncovered() &&  !cells[i][j].getIsFlagged())
 		{
 			cells[i][j].setIsUncovered(true);
-			if ( j < gridDim - 1) findEmptyCells(i, j + 1);
-			if ( i < gridDim - 1) findEmptyCells(i + 1, j);
+			if ( j < gridDimY - 1) findEmptyCells(i, j + 1);
+			if ( i < gridDimX - 1) findEmptyCells(i + 1, j);
 			
 			if ( i > 0) findEmptyCells(i - 1, j);
 			if ( j > 0) findEmptyCells(i, j - 1);
 			
-			if ( i < gridDim - 1 && j < gridDim - 1) findEmptyCells(i + 1, j + 1);
+			if ( i < gridDimX - 1 && j < gridDimY - 1) findEmptyCells(i + 1, j + 1);
 			if ( i > 0 && j > 0) findEmptyCells(i - 1, j - 1);
 			
-			if ( i < gridDim - 1 && j > 0) findEmptyCells(i + 1, j - 1);
-			if ( i > 0 && j < gridDim - 1) findEmptyCells(i - 1, j + 1);	
+			if ( i < gridDimX - 1 && j > 0) findEmptyCells(i + 1, j - 1);
+			if ( i > 0 && j < gridDimY - 1) findEmptyCells(i - 1, j + 1);	
 		}
 	    
 		if (!cells[i][j].getIsFlagged())
@@ -447,8 +450,8 @@ public class BeginnerGrid extends JPanel {
         int uncover = 0;
 
 
-        for (int i = 0; i < gridDim; i++) {
-            for (int j = 0; j < gridDim; j++) {
+        for (int i = 0; i < gridDimY; i++) {
+            for (int j = 0; j < gridDimX; j++) {
 
                 cell = cells[j][i];
                 
@@ -491,9 +494,9 @@ public class BeginnerGrid extends JPanel {
 	{
 		inGame = false;
 		
-		for ( int i = 0; i < gridDim; i++)
+		for ( int i = 0; i < gridDimY; i++)
 		{
-			for ( int j = 0; j < gridDim; j++)
+			for ( int j = 0; j < gridDimX; j++)
 			{
 				if ( !cells[j][i].getIsFlagged())
 				{
@@ -514,12 +517,19 @@ public class BeginnerGrid extends JPanel {
 		if ( !winner )
 		{
 			statusBar.setText("Game Lost");
+			// TODO stop timer
+			s.reset();
 		}
 		
 		else
 		{
 			statusBar.setText("Game Won!");
+			// TODO stop timer
 			// TODO Save high score
+			s.pause();
+			record.run(s.getTime());
+			//s.reset();
+			
 		}
 		
 		repaint();
@@ -547,8 +557,9 @@ public class BeginnerGrid extends JPanel {
 
             
 
-            if ((x < gridDim * CELL_SIZE) && (y < gridDim * CELL_SIZE)) {
+            if ((x < gridDimX * CELL_SIZE) && (y < gridDimY * CELL_SIZE)) {
             	
+            	s.start();
             	
                 if (e.getButton() == MouseEvent.BUTTON1) 
                 {
@@ -615,9 +626,9 @@ public class BeginnerGrid extends JPanel {
                 if (!inGame)
                 {
                 	
-                	for ( int i = 0; i < gridDim; i++)
+                	for ( int i = 0; i < gridDimY; i++)
             		{
-            			for ( int j = 0; j < gridDim; j++)
+            			for ( int j = 0; j < gridDimX; j++)
 		            	{
 		    				if (cells[j][i].getImageIndex() == BOMB)
 		    				{
