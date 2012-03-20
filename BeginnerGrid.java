@@ -24,6 +24,8 @@ public class BeginnerGrid extends JPanel {
 	private final int CELL_SIZE = 19;
 	private final int COVERED_MINE_CELL = COVER_FOR_CELL + BOMB;
 	private final int FLAGGED_MINE_CELL = FLAG + BOMB;
+	private boolean gameOver = false;
+	
 	
 	private Image[] img;
 	private int numMines = 10;
@@ -492,6 +494,7 @@ public class BeginnerGrid extends JPanel {
 
 	public void gameOver(boolean winner)
 	{
+		gameOver = true;
 		inGame = false;
 		
 		for ( int i = 0; i < gridDimY; i++)
@@ -524,11 +527,12 @@ public class BeginnerGrid extends JPanel {
 		else
 		{
 			statusBar.setText("Game Won!");
+			
 			// TODO stop timer
 			// TODO Save high score
 			s.pause();
 			record.run(s.getTime());
-			//s.reset();
+			s.reset();
 			
 		}
 		
@@ -558,8 +562,9 @@ public class BeginnerGrid extends JPanel {
             
 
             if ((x < gridDimX * CELL_SIZE) && (y < gridDimY * CELL_SIZE)) {
+            	if(!gameOver){
+            		s.start();
             	
-            	s.start();
             	
                 if (e.getButton() == MouseEvent.BUTTON1) 
                 {
@@ -643,7 +648,8 @@ public class BeginnerGrid extends JPanel {
             		}
                 }
             }
-        }
-    }
+            }//end if game Over
+        }//end Mouse Pressed
+    }//end Mines Adapter
 
-}
+}//end Beginner Grid
