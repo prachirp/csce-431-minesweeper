@@ -6,7 +6,7 @@ public class SMinesweeper extends JFrame {
 	
 	private JLabel statusBar;
 	
-	public SMinesweeper()
+	public SMinesweeper(int gridDimension, int numBombs)
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 600);
@@ -16,7 +16,7 @@ public class SMinesweeper extends JFrame {
 		statusBar = new JLabel("");
 		add( statusBar, BorderLayout.SOUTH );
 		
-		add(new BeginnerGrid(statusBar));
+		add(new BeginnerGrid(statusBar, gridDimension, numBombs));
 		
 		setResizable(false);
 		setVisible(true);
@@ -29,7 +29,9 @@ public class SMinesweeper extends JFrame {
 		//System.out.println("Creating Grid...");
 		//BeginnerGrid gameGrid = new BeginnerGrid();
 		//gameGrid.testGrid();
-		new SMinesweeper();
+		int gridDimension = 21;
+		int numBombs = 1;
+		new SMinesweeper(gridDimension, numBombs);
 	}
 
 }
