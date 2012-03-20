@@ -27,7 +27,7 @@ public class SMinesweeper extends JFrame {
 	private int numBombs;
 	private int xDim;
 	private int yDim;
-	
+	private final int CELL_SIZE = 19;
 	
 
     JMenuBar optionsMenuBar;
@@ -39,11 +39,11 @@ public class SMinesweeper extends JFrame {
 	
 	public SMinesweeper(int numBombs)
 	{
-		xDim = 8;
-		yDim = 8;
+		xDim = 18;
+		yDim = 18;
 		numBombs = 10;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(800, 600);
+		setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68);
 		setLocationRelativeTo(null);
 		setTitle("Square Minesweeper");
         setJMenuBar(createMenuBar());
