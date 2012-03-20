@@ -37,7 +37,7 @@ public class SMinesweeper extends JFrame {
     JTextField mineTextField, xTextField, yTextField;
 	
 	
-	public SMinesweeper(int gridDimension, int numBombs)
+	public SMinesweeper(int numBombs)
 	{
 		xDim = 8;
 		yDim = 8;
@@ -65,9 +65,8 @@ public class SMinesweeper extends JFrame {
 		//BeginnerGrid gameGrid = new BeginnerGrid();
 		//gameGrid.testGrid();
 		//StopWatch sWatch = new StopWatch();
-		int gridDimension = 9;
 		int numBombs = 10;
-		new SMinesweeper(gridDimension, numBombs);
+		new SMinesweeper(numBombs);
 	}
 	
     public JMenuBar createMenuBar() {
