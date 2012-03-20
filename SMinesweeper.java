@@ -93,19 +93,23 @@ public class SMinesweeper extends JFrame {
         ButtonGroup levels = new ButtonGroup();
 
         beginner = new JRadioButtonMenuItem("beginner");
+        beginner.addActionListener(new LevelActionListener());
         levels.add(beginner);
         menuOne.add(beginner);
 
         advanced = new JRadioButtonMenuItem("advanced");
+        advanced.addActionListener(new LevelActionListener());
         advanced.setSelected(true);
         levels.add(advanced);
         menuOne.add(advanced);
 
         expert = new JRadioButtonMenuItem("expert");
+        expert.addActionListener(new LevelActionListener());
         levels.add(expert);
         menuOne.add(expert);
 
         custom = new JRadioButtonMenuItem("custom");
+        custom.addActionListener(new LevelActionListener());
         levels.add(custom);
         menuOne.add(custom);
 
@@ -141,21 +145,25 @@ public class SMinesweeper extends JFrame {
     			xDim = 8;
     			yDim = 8;
     			numBombs = 10;
+    			System.out.println("game set to beginner");
     		}
     		else if(advanced.isSelected() == true){
     			xDim = 16;
     			yDim = 16;
     			numBombs = 40;
+    			System.out.println("game set to advanced");
     		}
     		else if(expert.isSelected() == true){
     			xDim = 30;
     			yDim = 16;
     			numBombs = 99;
+    			System.out.println("game set to expert");
     		}
     		else{
     	        xDim = (int)((Double.parseDouble(xTextField.getText())));
     	        yDim = (int)((Double.parseDouble(yTextField.getText())));
     	        numBombs = (int)((Double.parseDouble(mineTextField.getText())));
+    			System.out.println("game set to custom. xdim ydim numBombs: " + xDim + yDim + numBombs);
     		}
 		
     	}
