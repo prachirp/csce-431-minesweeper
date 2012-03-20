@@ -49,6 +49,9 @@ public class StopWatch extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 
+<<<<<<< .mine
+	//@Override
+=======
 	void start(){
 		timer.start();
 	}
@@ -70,6 +73,7 @@ public class StopWatch extends JFrame implements ActionListener{
 	
 	
 	
+>>>>>>> .r20
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
