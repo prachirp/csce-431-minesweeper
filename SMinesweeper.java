@@ -118,7 +118,7 @@ public class SMinesweeper extends JFrame {
 				
                 add( statusBar, BorderLayout.SOUTH );
                 
-                //add(new BeginnerGrid(statusBar));
+                add(new BeginnerGrid(statusBar, 10, 10));
                 
                 setResizable(false);
                 setVisible(true);
