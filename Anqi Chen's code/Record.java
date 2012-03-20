@@ -41,7 +41,8 @@ public class Record extends JFrame implements ActionListener{
 		Username.addActionListener(this);
 		Conf.addActionListener(this);
 		
-		file = new File("F:\\Programming\\Java\\ANQI CHEN 117\\score.txt");
+		//file = new File("F:\\Programming\\Java\\ANQI CHEN 117\\score.txt");
+		file = new File("score.txt");
 		
 		
 	}
@@ -146,16 +147,13 @@ public class Record extends JFrame implements ActionListener{
 		}
 	}
 	
-	
-
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Record r=new Record();
-		r.run(32);
+	    r.run(32);
+	    r.run(18);
 		
 	}
+
 
 }
