@@ -39,9 +39,9 @@ public class SMinesweeper extends JFrame {
 	
 	public SMinesweeper(int numBombs)
 	{
-		xDim = 18;
-		yDim = 18;
-		numBombs = 10;
+		xDim = 19;
+		yDim = 19;
+		numBombs = 5;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68);
 		setLocationRelativeTo(null);
