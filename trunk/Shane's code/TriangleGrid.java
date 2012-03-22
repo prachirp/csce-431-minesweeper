@@ -95,7 +95,7 @@ public class TriangleGrid extends JPanel
 					if(randIndexY == 0) //top left corner
 					{
 						//(x,y+1) (x+1,y+1)
-						//type is always UP on 10x10 grid
+						//type is always UP
 						if((cells[randIndexX][randIndexY+1].getValue()!=BOMB_UP) || (cells[randIndexX][randIndexY+1].getValue()!=BOMB_DOWN))
 							cells[randIndexX][randIndexY+1].setValue(cells[randIndexX][randIndexY+1].getValue() + 1);
 						if((cells[randIndexX+1][randIndexY+1].getValue()!=BOMB_UP) || (cells[randIndexX+1][randIndexY+1].getValue()!=BOMB_DOWN))
@@ -104,14 +104,14 @@ public class TriangleGrid extends JPanel
 					if(randIndexY == gridDimY-1) //bottom left corner
 					{
 						//(x,y-1)
-						//type is always UP on 10x10 grid
+						//type is always UP
 						if((cells[randIndexX][randIndexY-1].getValue()!=BOMB_UP) || (cells[randIndexX][randIndexY-1].getValue()!=BOMB_DOWN))
 							cells[randIndexX][randIndexY-1].setValue(cells[randIndexX][randIndexY-1].getValue() + 1);
 					}
 					else //somewhere on left edge
 					{
 						//(x,y-1) (x,y+1) (x+1,y+1)
-						//type is always UP on 10x10 grid
+						//type is always UP
 						if((cells[randIndexX][randIndexY-1].getValue()!=BOMB_UP) || (cells[randIndexX][randIndexY-1].getValue()!=BOMB_DOWN))
 							cells[randIndexX][randIndexY-1].setValue(cells[randIndexX][randIndexY-1].getValue() + 1);
 						if((cells[randIndexX][randIndexY+1].getValue()!=BOMB_UP) || (cells[randIndexX][randIndexY+1].getValue()!=BOMB_DOWN))
@@ -130,7 +130,11 @@ public class TriangleGrid extends JPanel
 					if(randIndexY == 0) //top right corner
 					{
 						//(x,y+1)
-						//type is always DOWN on 10x10 grid
+						//type is not known
+						//UP: (x-1,y+1)
+						if(randIndexX%2==0) //UP cell
+							if((cells[randIndexX-1][randIndexY+1].getValue()!=BOMB_DOWN))
+								cells[randIndexX-1][randIndexY+1].setValue(cells[randIndexX-1][randIndexY+1].getValue() + 1);
 						if((cells[randIndexX][randIndexY+1].getValue()!=BOMB_UP) || (cells[randIndexX][randIndexY+1].getValue()!=BOMB_DOWN))
 							cells[randIndexX][randIndexY+1].setValue(cells[randIndexX][randIndexY+1].getValue() + 1);
 					}
