@@ -24,13 +24,12 @@ public class BeginnerGrid extends JPanel {
 	private final int CELL_SIZE = 19;
 	private final int COVERED_MINE_CELL = COVER_FOR_CELL + BOMB;
 	private final int FLAGGED_MINE_CELL = FLAG + BOMB;
-	private boolean gameOver = false;
-	
 	
 	private Image[] img;
 	private int numMines = 10;
 	private int gridDimX, gridDimY;
 	private boolean inGame = true;
+	private boolean mouseInputEnabled = true;
 	private int flaggedMines = 0;
 	private int numFlags = 0;
 	private StopWatch s = new StopWatch();
@@ -494,28 +493,50 @@ public class BeginnerGrid extends JPanel {
 
 	public void gameOver(boolean winner)
 	{
-		gameOver = true;
 		inGame = false;
 		
 		for ( int i = 0; i < gridDimY; i++)
 		{
 			for ( int j = 0; j < gridDimX; j++)
 			{
-				if ( !cells[j][i].getIsFlagged())
-				{
-					cells[j][i].setIsUncovered(true);
-					//cells[j][i].setValue(cells[j][i].getImageIndex());
-				}
-				else 
-				{
-					if ( cells[j][i].getValue() != BOMB)
+				
+				if (winner)
+				{	
+					if (cells[j][i].getImageIndex() == COVER_FOR_CELL) // image is not a flag
 					{
-						cells[j][i].setValue(WRONG_FLAG);
+						cells[j][i].setIsUncovered(true);
+					}
+					
+					repaint();
+				}
+				
+				else
+				{
+					if (cells[j][i].getImageIndex() == FLAG)
+					{
+						// if flag is correct, draw flag
+						if (cells[j][i].getValue() == BOMB)
+						{
+							// do nothing
+						}
+						
+						// if flag is incorrect, draw wrong_flag
+						if (cells[j][i].getValue() != BOMB)
+						{
+							cells[j][i].setValue(WRONG_FLAG);
+							cells[j][i].setIsUncovered(true);
+						}
+					}
+					
+					else // cell is not flagged
+					{
+						// uncover
 						cells[j][i].setIsUncovered(true);
 					}
 				}
 			}
 		}
+		
 		
 		if ( !winner )
 		{
@@ -527,129 +548,147 @@ public class BeginnerGrid extends JPanel {
 		else
 		{
 			statusBar.setText("Game Won!");
-			
 			// TODO stop timer
 			// TODO Save high score
 			s.pause();
 			record.run(s.getTime());
-			s.reset();
+			//s.reset();
+			
+			for ( int i = 0; i < gridDimY; i++)
+			{
+				for ( int j = 0; j < gridDimX; j++)
+				{
+					if (cells[j][i].getValue() == BOMB)
+					{
+						cells[j][i].setImageIndex(FLAG);
+						cells[j][i].setValue(FLAG);
+						repaint();
+					}
+				}
+			}
 			
 		}
 		
+		
 		repaint();
+		mouseInputEnabled = false;
 		
 		
 	}
 	
 	class MinesAdapter extends MouseAdapter {
         public void mousePressed(MouseEvent e) {
-
+        	if (mouseInputEnabled){
         	
-            int x = e.getX();
-            int y = e.getY();
+	            int x = e.getX();
+	            int y = e.getY();
 
-            int cCol = x / CELL_SIZE;
-            int cRow = y / CELL_SIZE;
+	            int cCol = x / CELL_SIZE;
+	            int cRow = y / CELL_SIZE;
+	
+	            boolean rep = false;
 
-            boolean rep = false;
 
-
-            /*if (!inGame) {
-                initializeBoard(numMines);
-                repaint();
-            }*/
-
-            
-
-            if ((x < gridDimX * CELL_SIZE) && (y < gridDimY * CELL_SIZE)) {
-            	if(!gameOver){
-            		s.start();
+	            /*if (!inGame) {
+	                initializeBoard(numMines);
+	                repaint();
+	            }*/
+	
+	            
+	
+	            if ((x < gridDimX * CELL_SIZE) && (y < gridDimY * CELL_SIZE)) {
+	            	
+	            	s.start();
             	
-            	
-                if (e.getButton() == MouseEvent.BUTTON1) 
-                {
-                	//cells[cCol][cRow].setIsUncovered(true);
-                	//rep = true;
-                	
-                	if ( cells[cCol][cRow].getValue() == 0)
-                	{
-                		findEmptyCells(cCol, cRow);
-                	}
-                	else 
-                	{
-                		cells[cCol][cRow].setIsUncovered(true);
-                	}
-                	
-                	if ( cells[cCol][cRow].getValue() == BOMB)
-                	{
-                		cells[cCol][cRow].setValue(RED_BOMB);
-                		gameOver(false);
-                	}
-                	
-                	rep = true;
-                	
-                }
+	                if (e.getButton() == MouseEvent.BUTTON1) 
+	                {
+	                	//cells[cCol][cRow].setIsUncovered(true);
+	                	//rep = true;
+	                	
+	                	if ( cells[cCol][cRow].getValue() == 0)
+	                	{
+	                		findEmptyCells(cCol, cRow);
+	                	}
+	                	else 
+	                	{
+	                		cells[cCol][cRow].setIsUncovered(true);
+	                	}
+	                	
+	                	if ( cells[cCol][cRow].getValue() == BOMB)
+	                	{
+	                		cells[cCol][cRow].setValue(RED_BOMB);
+	                		gameOver(false);
+	                	}
+	                	
+	                	rep = true;
+	                	
+	                }
                 
-                else if (e.getButton() == MouseEvent.BUTTON3)
-                {
-                	boolean prevFlagStatus = cells[cCol][cRow].getIsFlagged();
-                	cells[cCol][cRow].setIsFlagged(!cells[cCol][cRow].getIsFlagged());
+	                else if (e.getButton() == MouseEvent.BUTTON3)
+	                {
+	                	boolean prevFlagStatus = cells[cCol][cRow].getIsFlagged();
+	                	cells[cCol][cRow].setIsFlagged(!cells[cCol][cRow].getIsFlagged());
+	                	
+	                	if (cells[cCol][cRow].getIsFlagged())
+	                	{
+	                		numFlags++;
+	                	}
+	                	else numFlags--;
+	                	
+	                	if (cells[cCol][cRow].getValue() == BOMB && cells[cCol][cRow].getIsFlagged())
+	                	{
+	                		flaggedMines++;
+	                		statusBar.setText("Number of flagged Mines: " + flaggedMines);
+	                	}
+	                	
+	                	if (cells[cCol][cRow].getValue() == BOMB && prevFlagStatus == true)
+	                	{
+	                		flaggedMines--;
+	                		statusBar.setText("Number of flagged Mines: " + flaggedMines);
+	                	}
+	                	
+	                	/*if (cells[cCol][cRow].getValue() == BOMB && prevFlagStatus == false)
+	                	{
+	                		flaggedMines++;
+	                		statusBar.setText("Number of flagged Mines: " + flaggedMines);
+	                	}*/
+	                	
+	                	if (flaggedMines == numMines && numFlags == flaggedMines)
+	                	{
+	                		//if(cells[cCol][cRow].getIsFlagged()) cells[cCol][cRow].setImageIndex(FLAG);
+	                		gameOver(true);
+	                	}
                 	
-                	if (cells[cCol][cRow].getIsFlagged())
-                	{
-                		numFlags++;
-                	}
-                	else numFlags--;
-                	
-                	if (cells[cCol][cRow].getValue() == BOMB && cells[cCol][cRow].getIsFlagged())
-                	{
-                		flaggedMines++;
-                		statusBar.setText("Number of flagged Mines: " + flaggedMines);
-                	}
-                	
-                	if (cells[cCol][cRow].getValue() == BOMB && prevFlagStatus == true)
-                	{
-                		flaggedMines--;
-                		statusBar.setText("Number of flagged Mines: " + flaggedMines);
-                	}
-                	
-                	if (flaggedMines == numMines && numFlags == flaggedMines)
-                	{
-                		
-                		gameOver(true);
-                	}
-                	
-                	rep = true;
-                }
+	                	rep = true;
+	                }
 
-                if (rep) 
-                {
-                    repaint();
-                    rep = false;
-                }
-                
-                if (!inGame)
-                {
-                	
-                	for ( int i = 0; i < gridDimY; i++)
-            		{
-            			for ( int j = 0; j < gridDimX; j++)
-		            	{
-		    				if (cells[j][i].getImageIndex() == BOMB)
-		    				{
-		    					cells[j][i].setValue(BOMB);
-		    				}
-		    				
-		    				if (cells[j][i].getImageIndex() == FLAG && cells[j][i].getValue() == BOMB)
-		    				{
-		    					cells[j][i].setValue(FLAG);
-		    				}
-		            	}
-            		}
-                }
-            }
-            }//end if game Over
-        }//end Mouse Pressed
-    }//end Mines Adapter
-
-}//end Beginner Grid
+	                if (rep) 
+	                {
+	                    repaint();
+	                    rep = false;
+	                }
+	                
+	                if (!inGame)
+	                {
+	                	
+	                	for ( int i = 0; i < gridDimY; i++)
+	            		{
+	            			for ( int j = 0; j < gridDimX; j++)
+			            	{
+			    				if (cells[j][i].getImageIndex() == BOMB)
+			    				{
+			    					cells[j][i].setValue(BOMB);
+			    				}
+			    				
+			    				/*if (cells[j][i].getImageIndex() == FLAG && cells[j][i].getValue() == BOMB)
+			    				{
+			    					cells[j][i].setValue(FLAG);
+			    				}*/
+			            	}
+	            		}
+	                }
+	            }
+        	}
+        }
+	}
+}
