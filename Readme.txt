@@ -1,7 +1,4 @@
-This is the first document to be committed to our repository.
-Add your name to it when you check out the code yourself, just to make sure we can all commit changes.
+This is Minesweeper v0.5. The version released right after the first sprint was completed.
+It contains only the square minesweeper game, but is a stable release.
 
-
-Vincent G.
-Shane Cottey
-Anqi Chen
+Compile BeginnerGrid, Cell, Record, SMinesweeper, and StopWatch classes to run.
