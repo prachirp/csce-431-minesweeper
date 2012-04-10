@@ -28,6 +28,7 @@ public class SMinesweeper extends JFrame {
 	private int xDim;
 	private int yDim;
 	private final int CELL_SIZE = 19;
+	private StopWatch stopWatch = new StopWatch(this);
 	
 
     JMenuBar optionsMenuBar;
@@ -35,6 +36,8 @@ public class SMinesweeper extends JFrame {
     JMenuItem load, save, about;
     JRadioButtonMenuItem beginner, advanced, expert, custom;
     JTextField mineTextField, xTextField, yTextField;
+    
+    public BeginnerGrid grid;
 	
 	
 	public SMinesweeper(int numBombs)
@@ -43,15 +46,16 @@ public class SMinesweeper extends JFrame {
 		yDim = 19;
 		numBombs = 5;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68);
+		setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68 + 10);
 		setLocationRelativeTo(null);
 		setTitle("Square Minesweeper");
         setJMenuBar(createMenuBar());
 		
 		statusBar = new JLabel("");
-		add( statusBar, BorderLayout.SOUTH );
+		//add( statusBar, BorderLayout.SOUTH );
 		
-		add(new BeginnerGrid(statusBar, xDim, yDim, numBombs));
+		grid = new BeginnerGrid(statusBar, xDim, yDim, numBombs, stopWatch);
+		add(grid);
 		
 		setResizable(false);
 		setVisible(true);
@@ -60,7 +64,6 @@ public class SMinesweeper extends JFrame {
 	
 	public static void main(String[] args)
 	{
-		// TODO Auto-generated method stub
 		//System.out.println("Creating Grid...");
 		//BeginnerGrid gameGrid = new BeginnerGrid();
 		//gameGrid.testGrid();
@@ -142,8 +145,8 @@ public class SMinesweeper extends JFrame {
 	
     	public void actionPerformed(ActionEvent evt){
     		if(beginner.isSelected() == true){
-    			xDim = 8;
-    			yDim = 8;
+    			xDim = 9;
+    			yDim = 9;
     			numBombs = 10;
     			System.out.println("game set to beginner");
     		}
@@ -165,6 +168,12 @@ public class SMinesweeper extends JFrame {
     	        numBombs = (int)((Double.parseDouble(mineTextField.getText())));
     			System.out.println("game set to custom. xdim ydim numBombs: " + xDim + yDim + numBombs);
     		}
+    		
+    		remove(grid);
+    		stopWatch.reset();
+			grid = new BeginnerGrid(statusBar, xDim, yDim, numBombs, stopWatch);
+			setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68 + 10);
+			add(grid);
 		
     	}
 	

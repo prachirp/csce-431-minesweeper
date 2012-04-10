@@ -4,19 +4,21 @@ import javax.swing.*;
 
 
 
-public class StopWatch extends JFrame implements ActionListener{
+public class StopWatch implements ActionListener{
 	/**
 	 * 
 	 */
 	JLabel timeArea;
+	JFrame gameWindow;
 	//JButton startBtn,pauseBtn,resetBtn;
 	int sec=0;
 	Timer timer;
 	
-	public StopWatch(){
+	public StopWatch(JFrame mainWindow){
 		
-		super("Time Spent");
-		Container contentPane=getContentPane();
+		//super("Time Spent");
+		gameWindow = mainWindow;
+		Container contentPane=gameWindow.getContentPane();
 		contentPane.setLayout(new BorderLayout()); //Initial BorderLayout
 		
 		//The time presenting area are in the North
@@ -26,7 +28,7 @@ public class StopWatch extends JFrame implements ActionListener{
 		timeArea.setBackground(Color.black);
 		timeArea.setFont(new Font("Arial",Font.ITALIC,24));
 		timeArea.setText("0");
-		contentPane.add(timeArea,BorderLayout.NORTH);
+		contentPane.add(timeArea,BorderLayout.SOUTH);
 		
 		//The start and pause area are in the middle
 		//JPanel pCenter=new JPanel(new GridLayout(1,2));
@@ -45,13 +47,10 @@ public class StopWatch extends JFrame implements ActionListener{
 		
 		timer=new Timer(1000,this);//Listen to the action listener
 		
-		pack();
-		setVisible(true);
+		gameWindow.pack();
+		gameWindow.setVisible(true);
 	}
 
-<<<<<<< .mine
-	//@Override
-=======
 	void start(){
 		timer.start();
 	}
@@ -70,10 +69,7 @@ public class StopWatch extends JFrame implements ActionListener{
 	int getTime(){
 		return sec;
 	}
-	
-	
-	
->>>>>>> .r20
+
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
