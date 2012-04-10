@@ -32,19 +32,20 @@ public class BeginnerGrid extends JPanel {
 	private boolean mouseInputEnabled = true;
 	private int flaggedMines = 0;
 	private int numFlags = 0;
-	private StopWatch s = new StopWatch();
+	private StopWatch s;
 	private Record record=new Record();
 	
 	private JLabel statusBar;
 	Cell[][] cells;// = new Cell[gridDim][gridDim];
 	
 	/// Constructor for BeginnerGrid, 9 x 9 with 10 mines
-	public BeginnerGrid(JLabel statusBar, int gridDimensionX, int gridDimensionY, int numBombs) {
+	public BeginnerGrid(JLabel statusBar, int gridDimensionX, int gridDimensionY, int numBombs, StopWatch sw) {
 		
 		numMines = numBombs;
 		gridDimX = gridDimensionX;
 		gridDimY = gridDimensionY;
 		cells = new Cell[gridDimX][gridDimY];
+		s = sw;
 		
 		this.statusBar = statusBar;
 		
@@ -577,6 +578,7 @@ public class BeginnerGrid extends JPanel {
 	}
 	
 	class MinesAdapter extends MouseAdapter {
+		
         public void mousePressed(MouseEvent e) {
         	if (mouseInputEnabled){
         	
