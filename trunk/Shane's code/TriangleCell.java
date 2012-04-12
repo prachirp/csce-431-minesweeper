@@ -5,7 +5,7 @@ public class TriangleCell
 	private boolean isUncovered;
 	private boolean isFlagged;
 	
-	public Cell(int imageIndex)
+	public TriangleCell(int imageIndex)
 	{ value=0; this.imageIndex=imageIndex; isUncovered=isFlagged=false; }
 	
 	public int getValue()
