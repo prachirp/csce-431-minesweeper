@@ -25,7 +25,7 @@ public class TriangleGrid extends JPanel
 	private final int WRONG_FLAG_UP=22;
 	private final int WRONG_FLAG_DOWN=23;
 	private final int NUM_IMAGES=24;
-	private final int CELL_SIZE=19;
+	private final int CELL_SIZE=26;
 	
 	private Image[] img;
 	private int numMines=10;
@@ -404,7 +404,7 @@ public class TriangleGrid extends JPanel
 						cell.setImageIndex(RED_BOMB_DOWN);
 				}
 				
-				g.drawImage(img[cell.getImageIndex()], (i*CELL_SIZE), (j*CELL_SIZE), this);
+				g.drawImage(img[cell.getImageIndex()], (i*(CELL_SIZE/2)), (j*CELL_SIZE), this);
 			}
 		
 	}
