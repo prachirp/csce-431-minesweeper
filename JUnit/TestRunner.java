@@ -1,5 +1,9 @@
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Formatter;
+
 import org.junit.Test;
 
 
@@ -14,55 +18,37 @@ public class TestRunner {
 	public void RunAll() {
 		
 		Formatter inputfile;
-		int counter = 0;
+		int totalcounter = 0;
+		int failcounter = 0;
 		file = new File("ErrorReport.txt");
 		
-		if(!file.exists()){	
-			try {
-				inputfile = new Formatter("ErrorReport.txt");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+		try{
 			
-			return;
-		}
+			if(!file.exists())
+				inputfile = new Formatter("ErrorReport.txt");
 		
 		Result result = JUnitCore.runClasses(CellTest.class); //Test cell class
-		
-
-			try {
-				inputfile = new Formatter("ErrorReport.txt");
-				for (Failure failure : result.getFailures()) {
-					//System.out.println(failure.toString());
-					inputfile.format("%s", failure.toString());
-					counter += result.getRunCount();
-				}
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
+	
+		inputfile = new Formatter("ErrorReport.txt");
+		for (Failure failure : result.getFailures()) {
+			inputfile.format("Error:  %s \n", failure.toString());
+			failcounter++;
+		}
+		totalcounter += result.getRunCount();
 		
 		result = JUnitCore.runClasses(BeginnerGridTest.class); //Test beginner grid
 
-			try {
-				inputfile = new Formatter("ErrorReport.txt");
-				for (Failure failure : result.getFailures()) {
-					inputfile.format("%s", failure.toString());
-					counter += result.getRunCount();
-				}
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+		for (Failure failure : result.getFailures()) {
+			inputfile.format("Error:  %s \n", failure.toString());
+			failcounter++;
 		}
+		totalcounter += result.getRunCount();
 		
-			try {
-				inputfile = new Formatter("ErrorReport.txt");
-				inputfile.format("%x tests completed", counter);
-				inputfile.close();
-			} catch (FileNotFoundException e) {
+		inputfile.format("%d tests completed, %d tests failed", totalcounter,failcounter);
+		inputfile.close();
+		} 
+		catch (FileNotFoundException e) {
 				e.printStackTrace();
-			}
-			
+			}	
 	}
 }
