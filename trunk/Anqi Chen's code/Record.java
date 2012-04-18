@@ -95,6 +95,7 @@ public class Record extends JFrame implements ActionListener{
 	public void PanelInput(int score){
 		Username.setText("");
 		this.pack();
+		this.setLocation(new Point(200, 400));
 		this.setVisible(true);
 	}
 	
