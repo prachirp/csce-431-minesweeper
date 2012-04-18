@@ -77,7 +77,7 @@ public class BeginnerGrid extends JPanel {
 	}
 	
 	/// Places mines in random cells, initializes the numbers in non-mine cells
-	private void initializeBoard(int _numMines)
+	protected void initializeBoard(int _numMines)
 	{
 		// Generate 10 bombs
 		Random random = new Random();
