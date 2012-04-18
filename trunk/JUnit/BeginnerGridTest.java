@@ -7,11 +7,12 @@ import org.junit.Test;
 
 public class BeginnerGridTest {
 
-	@Test(timeout = 1500)
+	@Test(timeout = 500)
 	public void testFindEmptyCells() {
 		JLabel statusBar;
 		statusBar = new JLabel("");
-		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5);
+		StopWatch s = null;
+		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5,s);
 		tester.findEmptyCells(0,0);
 	}
 
@@ -19,7 +20,8 @@ public class BeginnerGridTest {
 	public void testInitializeBoard() {
 		JLabel statusBar;
 		statusBar = new JLabel("");
-		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5);
+		StopWatch s = null;
+		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5,s);
 		tester.initializeBoard(5);
 	}
 
@@ -27,8 +29,9 @@ public class BeginnerGridTest {
 	public void testGameOver() {
 		JLabel statusBar;
 		statusBar = new JLabel("");
-		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5);
-		tester.gameOver(true);
+		StopWatch s = null;
+		BeginnerGrid tester = new BeginnerGrid(statusBar, 19, 19, 5,s);
+		tester.gameOver(false);
 	}
 
 }

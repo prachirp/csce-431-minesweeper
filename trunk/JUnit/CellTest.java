@@ -9,7 +9,7 @@ public class CellTest {
 	public void testGetValue() {
 		Cell tester = new Cell();
 		tester.setValue(9);
-		assertEquals("Result", 9, tester.getValue());
+		assertEquals("Result", 8, tester.getValue());
 	}
 
 	@Test
