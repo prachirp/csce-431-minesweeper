@@ -455,7 +455,7 @@ public class TriangleGrid extends JPanel
 		{
             int x = e.getX();
             int y = e.getY();
-            int cCol = x / CELL_SIZE;
+            //int cCol = x / CELL_SIZE;
             int cRow = y / CELL_SIZE;
             boolean rep = false;
 
