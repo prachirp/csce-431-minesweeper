@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 //BeginnerGrid class is a 9X9 board with 10 bombs
@@ -73,7 +74,7 @@ public class BeginnerGrid extends JPanel {
 		
 		this.statusBar.setText("Mines Left: " + numMines);
 		initializeBoard(numMines);
-		testGrid();
+		//testGrid();
 	}
 	
 	/// Places mines in random cells, initializes the numbers in non-mine cells
@@ -542,8 +543,8 @@ public class BeginnerGrid extends JPanel {
 		if ( !winner )
 		{
 			statusBar.setText("Game Lost");
-			// TODO stop timer
 			s.reset();
+			JOptionPane.showMessageDialog(this, "Oh no! You lost!", "D:", 0);
 		}
 		
 		else
@@ -567,7 +568,8 @@ public class BeginnerGrid extends JPanel {
 					}
 				}
 			}
-			
+
+			JOptionPane.showMessageDialog(this, "Hooray! You Won!", ":D", 0);
 		}
 		
 		
