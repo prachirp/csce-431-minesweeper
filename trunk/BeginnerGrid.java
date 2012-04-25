@@ -27,17 +27,20 @@ public class BeginnerGrid extends JPanel {
 	private final int FLAGGED_MINE_CELL = FLAG + BOMB;
 	
 	private Image[] img;
-	private int numMines = 10;
-	private int gridDimX, gridDimY;
+	protected int numMines = 10;
+	protected int gridDimX, gridDimY;
 	private boolean inGame = true;
 	private boolean mouseInputEnabled = true;
 	private int flaggedMines = 0;
 	private int numFlags = 0;
-	private StopWatch s;
+	protected StopWatch s;
 	private Record record=new Record();
 	
-	private JLabel statusBar;
+	protected JLabel statusBar;
+	public String message, title;
 	Cell[][] cells;// = new Cell[gridDim][gridDim];
+	
+	public BeginnerGrid(){}
 	
 	/// Constructor for BeginnerGrid, 9 x 9 with 10 mines
 	public BeginnerGrid(JLabel statusBar, int gridDimensionX, int gridDimensionY, int numBombs, StopWatch sw) {
@@ -542,14 +545,15 @@ public class BeginnerGrid extends JPanel {
 		
 		if ( !winner )
 		{
-			statusBar.setText("Game Lost");
+			//statusBar.setText("Game Lost");
 			s.reset();
-			JOptionPane.showMessageDialog(this, "Oh no! You lost!", "D:", 0);
+			message = "Oh no! You lost!";
+			title = "D:";
 		}
 		
 		else
 		{
-			statusBar.setText("Game Won!");
+			//statusBar.setText("Game Won!");
 			// TODO stop timer
 			// TODO Save high score
 			s.pause();
@@ -568,11 +572,11 @@ public class BeginnerGrid extends JPanel {
 					}
 				}
 			}
-
-			JOptionPane.showMessageDialog(this, "Hooray! You Won!", ":D", 0);
+			message = "Hooray! You Won!";
+			title = ":D";
 		}
 		
-		
+		JOptionPane.showMessageDialog(this, message, title, 0);
 		repaint();
 		mouseInputEnabled = false;
 		
