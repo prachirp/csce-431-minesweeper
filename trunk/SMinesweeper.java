@@ -47,9 +47,9 @@ public class SMinesweeper extends JFrame {
 	
 	public SMinesweeper(int numBombs)
 	{
-		xDim = 19;
-		yDim = 19;
-		numBombs = 5;
+		xDim = 9;
+		yDim = 9;
+		numBombs = 10;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize((CELL_SIZE * xDim) + 6, (CELL_SIZE * yDim) + 68 + 10);
 		setLocationRelativeTo(null);
@@ -103,11 +103,11 @@ public class SMinesweeper extends JFrame {
         beginner = new JRadioButtonMenuItem("beginner");
         beginner.addActionListener(new LevelActionListener(this, levels));
         levels.add(beginner);
+        beginner.setSelected(true);
         menuOne.add(beginner);
 
         advanced = new JRadioButtonMenuItem("advanced");
         advanced.addActionListener(new LevelActionListener(this, levels));
-        advanced.setSelected(true);
         levels.add(advanced);
         menuOne.add(advanced);
 
@@ -182,14 +182,12 @@ public class SMinesweeper extends JFrame {
     		else{
     			try 
     			{ 
-    				
     				Integer.parseInt( xTextField.getText() ); 
     				Integer.parseInt(yTextField.getText());
     				Integer.parseInt(mineTextField.getText());
     			}
     			catch (NumberFormatException e) {
-    				//lastChosen.setEnabled(true);
-    				//levels.setSelected(lastChosen, true);
+    				
     				levels.clearSelection();
 
     				JOptionPane.showMessageDialog(gameWindow, "Set custom values first!", "Error", 0);
