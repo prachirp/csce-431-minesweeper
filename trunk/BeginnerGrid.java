@@ -633,7 +633,7 @@ public class BeginnerGrid extends JPanel {
                 
 	                else if (e.getButton() == MouseEvent.BUTTON3)
 	                {
-	                	if (cells[cCol][cRow].getImageIndex() != COVER_FOR_CELL)
+	                	if (cells[cCol][cRow].getImageIndex() < COVER_FOR_CELL || cells[cCol][cRow].getImageIndex() > FLAG)
 	                	{
 	                		return;
 	                	}
