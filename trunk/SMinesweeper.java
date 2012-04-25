@@ -2,9 +2,13 @@
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JDialog;
 
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.swing.ButtonModel;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -19,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.JFrame;
+import javax.swing.event.ChangeListener;
 
 public class SMinesweeper extends JFrame {
 	
@@ -96,23 +101,23 @@ public class SMinesweeper extends JFrame {
         ButtonGroup levels = new ButtonGroup();
 
         beginner = new JRadioButtonMenuItem("beginner");
-        beginner.addActionListener(new LevelActionListener());
+        beginner.addActionListener(new LevelActionListener(this, levels));
         levels.add(beginner);
         menuOne.add(beginner);
 
         advanced = new JRadioButtonMenuItem("advanced");
-        advanced.addActionListener(new LevelActionListener());
+        advanced.addActionListener(new LevelActionListener(this, levels));
         advanced.setSelected(true);
         levels.add(advanced);
         menuOne.add(advanced);
 
         expert = new JRadioButtonMenuItem("expert");
-        expert.addActionListener(new LevelActionListener());
+        expert.addActionListener(new LevelActionListener(this, levels));
         levels.add(expert);
         menuOne.add(expert);
 
         custom = new JRadioButtonMenuItem("custom");
-        custom.addActionListener(new LevelActionListener());
+        custom.addActionListener(new LevelActionListener(this, levels));
         levels.add(custom);
         menuOne.add(custom);
 
@@ -142,27 +147,54 @@ public class SMinesweeper extends JFrame {
     
 
     class LevelActionListener implements ActionListener{
-	
+    	
+    	public JFrame gameWindow;
+    	public ButtonGroup levels;
+    	public JRadioButtonMenuItem lastChosen;
+    	
+    	public LevelActionListener(JFrame gw, ButtonGroup lvls) {
+			gameWindow = gw;
+			levels = lvls;
+		}
+    	
     	public void actionPerformed(ActionEvent evt){
     		if(beginner.isSelected() == true){
     			xDim = 9;
     			yDim = 9;
     			numBombs = 10;
+    			lastChosen = beginner;
     			System.out.println("game set to beginner");
     		}
     		else if(advanced.isSelected() == true){
     			xDim = 16;
     			yDim = 16;
     			numBombs = 40;
+    			lastChosen = advanced;
     			System.out.println("game set to advanced");
     		}
     		else if(expert.isSelected() == true){
     			xDim = 30;
     			yDim = 16;
     			numBombs = 99;
+    			lastChosen = expert;
     			System.out.println("game set to expert");
     		}
     		else{
+    			try 
+    			{ 
+    				
+    				Integer.parseInt( xTextField.getText() ); 
+    				Integer.parseInt(yTextField.getText());
+    				Integer.parseInt(mineTextField.getText());
+    			}
+    			catch (NumberFormatException e) {
+    				//lastChosen.setEnabled(true);
+    				//levels.setSelected(lastChosen, true);
+    				levels.clearSelection();
+
+    				JOptionPane.showMessageDialog(gameWindow, "Set custom values first!", "Error", 0);
+					return;
+				}
     	        xDim = (int)((Double.parseDouble(xTextField.getText())));
     	        yDim = (int)((Double.parseDouble(yTextField.getText())));
     	        numBombs = (int)((Double.parseDouble(mineTextField.getText())));
