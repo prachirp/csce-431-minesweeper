@@ -587,7 +587,6 @@ public class BeginnerGrid extends JPanel {
 		
         public void mousePressed(MouseEvent e) {
         	if (mouseInputEnabled){
-        	
 	            int x = e.getX();
 	            int y = e.getY();
 
@@ -634,6 +633,11 @@ public class BeginnerGrid extends JPanel {
                 
 	                else if (e.getButton() == MouseEvent.BUTTON3)
 	                {
+	                	if (cells[cCol][cRow].getImageIndex() != COVER_FOR_CELL)
+	                	{
+	                		return;
+	                	}
+	                	
 	                	boolean prevFlagStatus = cells[cCol][cRow].getIsFlagged();
 	                	cells[cCol][cRow].setIsFlagged(!cells[cCol][cRow].getIsFlagged());
 	                	
@@ -697,6 +701,11 @@ public class BeginnerGrid extends JPanel {
 	                }
 	            }
         	}
+        	
+        	System.out.println("numFlags: " + numFlags);
+    		System.out.println("numMines: " + numMines);
+    		System.out.println("flaggedMines: " + flaggedMines);
+    		System.out.println();
         }
 	}
 }
