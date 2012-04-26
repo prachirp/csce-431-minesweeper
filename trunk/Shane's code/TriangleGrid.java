@@ -602,9 +602,4 @@ public class TriangleGrid extends JPanel
     }
 	
 }
-					
-					
-					
-					
-					
-					
+
