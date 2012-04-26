@@ -418,7 +418,7 @@ public class TriangleGrid extends JPanel
 						cell.setImageIndex(FLAG_DOWN);
 				}
 				
-				g.drawImage(img[cell.getImageIndex()], (i*(CELL_SIZE/2)), (j*CELL_SIZE), this);
+				g.drawImage(img[cell.getImageIndex()], (i*13), (j*CELL_SIZE), this);
 			}
 		
 	}
@@ -504,7 +504,7 @@ public class TriangleGrid extends JPanel
 			if(xx%2==0)  //even
 			{
 				starty=(yy*25)+25;
-				for(int i=(xx*12);i<=(xx*12)+12;i++)
+				for(int i=(xx*13);i<=(xx*13)+13;i++)
 					if(i==x)
 					{
 						if(starty>=y)
@@ -517,7 +517,7 @@ public class TriangleGrid extends JPanel
 			else if(xx%2==1)  //odd
 			{
 				starty=(yy*25);
-				for(int i=(xx*12);i<=(xx*12)+12;i++)
+				for(int i=(xx*13);i<=(xx*13)+13;i++)
 					if(i==x)
 					{
 						if(starty>=y)
