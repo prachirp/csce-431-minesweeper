@@ -39,7 +39,7 @@ public class HexJavaBeginnerGrid extends JPanel{
 	private JLabel statusBar;
 	HexCell[][] HexCells; 						//it's a map
 	
-	//private StopWatch s = new StopWatch(this);
+	//private StopWatch sw;
 	//private Record rec = new Record();
 	
 	
@@ -51,8 +51,11 @@ public class HexJavaBeginnerGrid extends JPanel{
 		gridDimY = gridDimensionY*2;
 		HexCells = new HexCell[gridDimX][gridDimY];  //notice, it use new.  HexCell[gridDim][gridDim]
 		this.statusBar = statusBar;					//Show the message
+		//sw=s;
+		
 		image = new Image[NUM_IMAGES];				//Java use this method
 		img = new BufferedImage[NUM_IMAGES];   		//Resize Image
+		
 		
 		for (int i = 0; i < NUM_IMAGES; i++){		//Resize the picture
 			image[i] = new ImageIcon(this.getClass().getResource((i) + ".png")).getImage();
