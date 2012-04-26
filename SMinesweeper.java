@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JFrame;
 import javax.swing.event.ChangeListener;
 
+import java.io.*;
+
 public class SMinesweeper extends JFrame {
 	
 	private JLabel statusBar;
@@ -41,6 +43,15 @@ public class SMinesweeper extends JFrame {
     JMenuItem load, save, about;
     JRadioButtonMenuItem beginner, advanced, expert, custom;
     JTextField mineTextField, xTextField, yTextField;
+    File topTen = new File("..//topTen.txt");
+    
+    if(!topTen.exists()){
+    	boolean done = topTen.createNewFile();
+    }
+    
+    if(done == false){
+    	System.out.println("Top ten file existed already or there was an error.");
+    }
     
     public BeginnerGrid grid;
 	
