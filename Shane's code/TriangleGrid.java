@@ -25,7 +25,7 @@ public class TriangleGrid extends JPanel
 	private final int WRONG_FLAG_UP=22;
 	private final int WRONG_FLAG_DOWN=23;
 	private final int NUM_IMAGES=24;
-	private final int CELL_SIZE=26;
+	private final int CELL_SIZE=25;
 	
 	private Image[] img;
 	private int numMines=10;
@@ -455,25 +455,55 @@ public class TriangleGrid extends JPanel
 		{
             int x = e.getX();
             int y = e.getY();
-            //int cCol = x / CELL_SIZE;
-            int cRow = y / CELL_SIZE;
+            int cCol;
+            int cRow;
             boolean rep = false;
 
-            /*if (!inGame) {
-                initializeBoard(numMines);
-                repaint();
-            }*/
+			//figure out ccol and crow right here
+			int xx=x/(CELL_SIZE/2);
+			int yy=y/CELL_SIZE);
+			cRow=yy;
+			int starty;
+			//if x<12 set flag
+			//if x>
+			
+			if(xx%2==0)  //even
+			{
+				starty=(yy*25)+25;
+				for(int i=(xx*12);i<=(xx*12)+12;i++)
+					if(i==x)
+					{
+						if(starty>=y)
+							cCol==xx;
+						else if(starty<y)
+							cCol==xx-1;
+						starty-=2;
+					}
+			}
+			else if(xx%2==1)  //odd
+			{
+				starty=(yy*25);
+				for(int i=(xx*12);i<=(xx*12)+12;i++)
+					if(i==x)
+					{
+						if(starty>=y)
+							cCol=xx;
+						else if(starty<y)
+							cCol=xx-1;
+						starty+=2;
+					}
+			}
 
-            if ((x < gridDimX * CELL_SIZE) && (y < gridDimY * CELL_SIZE))
+            if((x<gridDimX*CELL_SIZE && y < gridDimY * CELL_SIZE) && (cCol>=0 && cCol<gridDimX))
 			{
             	if(!gameOver)
 				{
             		s.start();
-					if (e.getButton() == MouseEvent.BUTTON1) 
+					if(e.getButton() == MouseEvent.BUTTON1) 
 					{
 						//cells[cCol][cRow].setIsUncovered(true);
 						//rep = true;
-						if (cells[cCol][cRow].getValue() == 0)
+						if(cells[cCol][cRow].getValue() == 0)
 						{
 							findEmptyCells(cCol, cRow);
 						}
@@ -482,7 +512,7 @@ public class TriangleGrid extends JPanel
 							cells[cCol][cRow].setIsUncovered(true);
 						}
                 	
-						if ( cells[cCol][cRow].getValue() == BOMB_UP)
+						if(cells[cCol][cRow].getValue()==BOMB_UP)
 						{
 							cells[cCol][cRow].setValue(RED_BOMB_UP);
 							gameOver(false);
