@@ -26,12 +26,14 @@ public class TriangleGrid extends JPanel{
 	private final int WRONG_FLAG_UP=34;
 	private final int WRONG_FLAG_DOWN=35;
 	private final int NUM_IMAGES=36;
-	private final int CELL_SIZE=25;
+	private final int CELL_SIZE_X=25;
+	private final int CELL_SIZE_Y=25;
 
 	private Image[] img;
 	private int numMines=10;
 	private int gridDimX, gridDimY;
 	private boolean inGame = true;
+	private boolean isPending = true;
 	private boolean mouseInputEnabled=true;
 	private int flaggedMines=0;
 	private int numFlags=0;
@@ -46,7 +48,7 @@ public class TriangleGrid extends JPanel{
 
 	public TriangleGrid(JLabel statBar, int gridDimensionX, int gridDimensionY, int numBombs){ //Stopwatch sw
 		numMines=numBombs;
-		gridDimX=gridDimensionX*2;
+		gridDimX=gridDimensionX;
 		gridDimY=gridDimensionY;
 		cells=new TriangleCell[gridDimX][gridDimY];
 		//s=sw;
@@ -1033,7 +1035,7 @@ public class TriangleGrid extends JPanel{
 					}
 				}
 
-				g.drawImage(img[cell.getImageIndex()], (i*13), (j*CELL_SIZE), this); //MAGIC GRAPHICS CONSTANT 13!!!!
+				g.drawImage(img[cell.getImageIndex()], (i*CELL_SIZE_X), (j*CELL_SIZE_Y), this);
 			}
 		}
 	}
@@ -1096,130 +1098,133 @@ public class TriangleGrid extends JPanel{
 		mouseInputEnabled=false;
 	}
 
-	class MinesAdapter extends MouseAdapter{
-		public void mousePressed(MouseEvent e){
-			int x = e.getX();
-			int y = e.getY();
-			int cCol = -999;
-			int cRow = -999;
-			boolean rep = false;
+	class MinesAdapter extends MouseAdapter {
+        public void mousePressed(MouseEvent e) {
 
-			//figure out ccol and crow right here
-			int xx=x/(CELL_SIZE/2);
-			int yy=y/(CELL_SIZE);
-			cRow=yy;
-			int starty;
-			//if x<12 set flag
-			//if x>
+            double x = e.getX();
+            double y = e.getY();
 
-			if(xx%2==0){  //even
-				starty=(yy*25)+25;
-				for(int i=(xx*13);i<=(xx*13)+13;i++){
-					if(i==x){
-						if(starty>=y){
-							cCol = xx; //??
-							//cCol==xx; //LOOK AT THIS!!!
-						}
-						else{ //if(starty<y)
-							cCol = xx-1; //??
-							//cCol==xx-1; //LOOK AT THIS!!!
-						}
-						starty-=2;
-					}
-				}
-			}
-			else{  //odd   if(xx%2==1)
-				starty=(yy*25);
-				for(int i=(xx*13);i<=(xx*13)+13;i++){
-					if(i==x){
-						if(starty>=y){
-							cCol=xx;
-						}
-						else{ //  if(starty<y)
-							cCol=xx-1;
-						}
-						starty+=2;
-					}
-				}
-			}
+            double fixX=x;
+            double fixY=y;
+            
+            int cRow = (int)(fixX / CELL_SIZE_X);
+            int cCol = (int)(fixY / CELL_SIZE_Y);
+            
+            System.out.println("Clicked on cell (x, y): " + cRow + " " + cCol);
 
-			if((x<gridDimX*CELL_SIZE && y < gridDimY * CELL_SIZE) && (cCol>=0 && cCol<gridDimX)){
-				s.start();
-				if(e.getButton() == MouseEvent.BUTTON1) {
-					if(cells[cCol][cRow].getValue() == EMPTY_UP || cells[cCol][cRow].getValue()==EMPTY_DOWN){
-						findEmptyCells(cCol, cRow);
-					}
-					else{
-						cells[cCol][cRow].setUncovered(true);
-					}
+            boolean rep = false;            
 
-					if(cells[cCol][cRow].getValue()==BOMB_UP){
-						cells[cCol][cRow].setValue(RED_BOMB_UP);
-						gameOver(false);
-					}
-					if(cells[cCol][cRow].getValue()==BOMB_DOWN){
-						cells[cCol][cRow].setValue(RED_BOMB_UP);
-						gameOver(false);
-					}
-					rep = true;
-				}
+            if (!inGame) {
+                setBombs(numMines);
+                
+                repaint();
+                inGame=true;
+                isPending=true;
+            }
+            else{
+            	if(isPending==true){
+            		//sw.start();
+            		isPending=false;
+            	}
+            	/*
+            	int cRow1 = cRow-1;
+            	int cRow2 = cRow;
+            	int cCol1 = cCol-1;
+            	int cCol2 = cCol;
+            	int tmpRow1,tmpCol1,tmpRow2,tmpCol2;
+            	if((cRow1+cCol1+10)%2==1){    //add 10, otherwise (-1)%2==0
+            		tmpRow1=cRow1;
+            		tmpCol1=cCol1;
+            		tmpRow2=cRow2;
+            		tmpCol2=cCol2;
+            	}
+            	else{
+            		tmpRow1=cRow2;
+            		tmpCol1=cCol1;
+            		tmpRow2=cRow1;
+            		tmpCol2=cCol2;
+            	}
+            
+            	if(tmpRow1>gridDimX+1||tmpCol1>gridDimY+1){		//for border use
+            		cRow=tmpRow2;
+            		cCol=tmpCol2;
+            	}
+            	else if(tmpRow2>gridDimX+1||tmpCol2>gridDimY+1){   //for border use
+            		cRow=tmpRow1;
+            		cCol=tmpCol1;
+            	}
+            	else{
+            		cRow= Math.pow((fixX-(double)(tmpRow1+1)*CELL_SIZE_X),2)+Math.pow((fixY-(double)(tmpCol1+0.5)*CELL_SIZE_Y),2)
+            			< Math.pow((fixX-(double)(tmpRow2+1)*CELL_SIZE_X),2)+Math.pow((fixY-(double)(tmpCol2+0.5)*CELL_SIZE_Y),2)
+            			?tmpRow1:tmpRow2;
+            		cCol= Math.pow((fixX-(double)(tmpRow1+1)*CELL_SIZE_X),2)+Math.pow((fixY-(double)(tmpCol1+0.5)*CELL_SIZE_Y),2)
+            			< Math.pow((fixX-(double)(tmpRow2+1)*CELL_SIZE_X),2)+Math.pow((fixY-(double)(tmpCol2+0.5)*CELL_SIZE_Y),2)
+            			?tmpCol1:tmpCol2;
+            	}
+            */
+            	if (e.getButton() == MouseEvent.BUTTON1) 
+            	{
+            		if(cRow>=0&&cRow<gridDimX&&cCol>=0&&cCol<gridDimY){
+            			if(cells[cRow][cCol].isFlagged()){           		
+            				cells[cRow][cCol].setFlagged(false);
+            				numFlags++;
+            				statusBar.setText("Flags Left: " + numFlags);
+            			}
+            			else {
+            				if(cells[cRow][cCol].getValue() == 0){
+            					findEmptyCells(cRow, cCol);
+            				}
+            				else {
+            					cells[cRow][cCol].setUncovered(true);
+            				}
+            	
+            				if ( cells[cRow][cCol].getValue() == BOMB_UP)
+            				{
+            					cells[cRow][cCol].setValue(RED_BOMB_UP);
+            					gameOver(false);
+            				}
+										else if ( cells[cRow][cCol].getValue() == BOMB_DOWN){
+											cells[cRow][cCol].setValue(RED_BOMB_DOWN);
+											gameOver(false);
+										}
+            			}
+            		
+            		rep = true;
+            		System.out.println();
+            	}
+            }
+            else if (e.getButton() == MouseEvent.BUTTON3)
+            {
+            	if(cRow>=0&&cRow<gridDimX&&cCol>=0&&cCol<gridDimY){
+            		if(!cells[cRow][cCol].isFlagged()){
+            			if(numFlags==0){
+            				statusBar.setText("No More Flags. Flags Left: 0");
+            			}
+            			else{
+            				if(!cells[cRow][cCol].isUncovered()){
+            					cells[cRow][cCol].setFlagged(true);
+            					numFlags--;
+            					statusBar.setText("Flags Left: " + numFlags);
+            					}
+            				}
+            		}
+            		else{
+            			cells[cRow][cCol].setFlagged(false);
+            			numFlags++;
+            			statusBar.setText("Flags Left: " + numFlags);
+            		}
+            			rep = true;
+            	}
+            }
+            
+            if (rep) 
+            {
+                repaint();
+                rep = false;
+            }   
+        }
+	}
+   }
+}
 
-				else if(e.getButton() == MouseEvent.BUTTON3){
-					/*
-					////////// if it's not covered or isn't already flagged, BUTTON3 does nothing ////////////////
-					if(cells[i][j].getImageIndex()!=COVER_UP || cells[i][j].getImageIndex()!=COVER_DOWN || cells[i][j].getImageIndex()!=FLAG_UP || cells[i][j].getImageIndex()!=FLAG_DOWN){
-						return;
-					}
-					////////////////////////////////////////////////////////////////////////////////////////////
-					*/
-					if(cells[cCol][cRow].getImageIndex()!=COVER_UP || cells[cCol][cRow].getImageIndex()!=COVER_DOWN || cells[cCol][cRow].getImageIndex()!=FLAG_UP || cells[cCol][cRow].getImageIndex()!=FLAG_DOWN){
-						return;
-					}
-
-					//flip cell's flag T/F
-					boolean prevFlagStatus = cells[cCol][cRow].isFlagged();
-					cells[cCol][cRow].setFlagged(!prevFlagStatus);
-
-					if (cells[cCol][cRow].isFlagged()){
-						numFlags++;
-					}
-					else{
-						numFlags--;
-					}
-
-					if ((cells[cCol][cRow].getValue()==BOMB_UP || cells[cCol][cRow].getValue()==BOMB_DOWN) && cells[cCol][cRow].isFlagged()){
-						flaggedMines++;
-						statusBar.setText("Number of flagged Mines: " + flaggedMines);
-					}
-					if ((cells[cCol][cRow].getValue()==BOMB_UP || cells[cCol][cRow].getValue()==BOMB_DOWN) && prevFlagStatus==true){
-						flaggedMines--;
-						statusBar.setText("Number of flagged Mines: " + flaggedMines);
-					}
-					if (flaggedMines == numMines && numFlags == flaggedMines){
-						gameOver(true);
-					}
-					rep = true;
-				}
-				if (rep) {
-					repaint();
-					rep = false;
-				}
-				if (!inGame){
-					for ( int i = 0; i < gridDimY; i++){
-						for ( int j = 0; j < gridDimX; j++){
-							if(cells[i][j].getImageIndex()==BOMB_UP){
-								cells[i][j].setValue(BOMB_UP);
-							}
-							if(cells[i][j].getImageIndex()==BOMB_DOWN){
-								cells[i][j].setValue(BOMB_DOWN);
-							}
-						}
-					}
-				}
-			}
-		}//end mousePressed function
-
-	}//end MinesAdapter class
-
-}//end TriangleGrid class
 
